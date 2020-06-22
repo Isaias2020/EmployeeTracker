@@ -24,7 +24,7 @@ function start() {
             "View all employees?",
             "View all employees by department?",
             "View all employees by manager?",
-            "Add employee?",
+            "Add employee",
             "Remove employee?",
             "Update employee role?",
             "Update employee manager?",
@@ -72,7 +72,7 @@ function start() {
                     viewRole();
                     break;
 
-                case "Add Roles":
+                case "Add roles":
                     addRole();
                     break;
 
@@ -84,7 +84,7 @@ function start() {
                     viewDepartment();
                     break;
 
-                case "Add Department":
+                case "Add department":
                     addDepartment();
                     break;
 
@@ -103,6 +103,88 @@ function start() {
         });
 };
 
-function viewEmployee() {
+// function viewEmployee() {
+//     inquirer.prompt({
+//         name: "employee",
+//         type: "input",
+//         message: "What is the employee's first name?"
+//     })
+//         .then(function (answer) {
+//             var query = "SELECT first_name last_name role_id manager_id FROM employee WHERE? ";
+//             connection.query()
+//         })
+// }
 
+function addDepartment() {
+    inquirer.prompt({
+        name: "Department",
+        type: "input",
+        message: "What is the name of the department?"
+    })
+        .then(function (answer) {
+            connection.query("INSERT INTO department SET ?", {
+                name: answer.Department
+            })
+            start()
+        })
+}
+
+function addRole() {
+    inquirer.prompt([{
+        name: "title",
+        type: "input",
+        message: "What is the title of the role?"
+    },
+    {
+        name: "salary",
+        type: "input",
+        message: "What is the salary?"
+    },
+    {
+        name: "departmentId",
+        type: "input",
+        message: "What is the department id that the role belongs to?"
+    }
+    ])
+        .then(function (answer) {
+            connection.query("INSERT INTO role SET ?", {
+                title: answer.title,
+                salary: answer.salary,
+                department_id: answer.departmentId
+            })
+            start()
+        })
+}
+
+function addEmployee() {
+    inquirer.prompt([{
+        name: "firstName",
+        type: "input",
+        message: "What is the Employee's first name?"
+    },
+    {
+        name: "lastName",
+        type: "input",
+        message: "What is the Employee's last name?"
+    },
+    {
+        name: "roleId",
+        type: "input",
+        message: "What is the id of the role for this employee?"
+    },
+    {
+        name: "ManagerId",
+        type: "input",
+        message: "What is the id of the Manager for this employee?"
+    }
+    ])
+        .then(function (answer) {
+            connection.query("INSERT INTO employee SET ?", {
+                first_name: answer.firstName,
+                last_name: answer.lastName,
+                role_id: answer.roleId,
+                manager_id: answer.ManagerId
+            })
+            start()
+        })
 }
