@@ -14,20 +14,19 @@ connection.connect(function (err) {
     start();
 });
 
-// const start = () => console.log("Test")
 function start() {
     inquirer.prompt({
         name: "action",
         type: "list",
         message: "What would you like to do?",
         choices: [
-            "View all employees?",
-            "View all employees by department?",
-            "View all employees by manager?",
+            "View all employees",
+            "View all employees by department",
+            "View all employees by manager",
             "Add employee",
-            "Remove employee?",
-            "Update employee role?",
-            "Update employee manager?",
+            "Remove employee",
+            "Update employee role",
+            "Update employee manager",
             "View Roles",
             "Add roles",
             "Remove role",
@@ -40,11 +39,11 @@ function start() {
     })
         .then(function (answer) {
             switch (answer.action) {
-                case "View all Employees":
+                case "View all employees":
                     viewEmployee();
                     break;
 
-                case "View all Employees by department":
+                case "View all employees by department":
                     viewEmpDepartment();
                     break;
 
@@ -60,11 +59,11 @@ function start() {
                     removeEmployee();
                     break;
 
-                case "Update employee's role":
+                case "Update employee role":
                     updateEmployee();
                     break;
 
-                case "Update employee's manager":
+                case "Update employee manager":
                     updateManager();
                     break;
 
@@ -76,7 +75,7 @@ function start() {
                     addRole();
                     break;
 
-                case "Remove Role":
+                case "Remove role":
                     removeRole();
                     break;
 
@@ -103,18 +102,7 @@ function start() {
         });
 };
 
-// function viewEmployee() {
-//     inquirer.prompt({
-//         name: "employee",
-//         type: "input",
-//         message: "What is the employee's first name?"
-//     })
-//         .then(function (answer) {
-//             var query = "SELECT first_name last_name role_id manager_id FROM employee WHERE? ";
-//             connection.query()
-//         })
-// }
-
+// Add Department
 function addDepartment() {
     inquirer.prompt({
         name: "Department",
@@ -129,6 +117,7 @@ function addDepartment() {
         })
 }
 
+// Add Role
 function addRole() {
     inquirer.prompt([{
         name: "title",
@@ -156,6 +145,7 @@ function addRole() {
         })
 }
 
+// Add employee
 function addEmployee() {
     inquirer.prompt([{
         name: "firstName",
@@ -184,7 +174,52 @@ function addEmployee() {
                 last_name: answer.lastName,
                 role_id: answer.roleId,
                 manager_id: answer.ManagerId
-            })
+            },
+                function (err, answer) {
+                    if (err) {
+                        throw err;
+                    }
+                }
+            );
             start()
-        })
+        });
+}
+
+// View ALL departments
+function viewDepartment() {
+    inquirer.prompt([{
+        name: "department",
+        type: "list",
+        message: "Which department would you like to view?",
+        choices: ["HR", "Engineering", "Sales"]
+    }
+    ])
+        .then(function (answer) {
+            connection.query("SELECT * FROM department", function (err, answer) {
+                console.log("\n Departments Retrieved from Database \n");
+                console.table(answer);
+            });
+            start()
+        });
+}
+
+// View ALL roles
+function viewRole() {
+    connection.query("SELECT * FROM role", function (err, answer) {
+        console.log("\n Roles Retrieved from Database \n");
+        console.table(answer);
+    });
+    start();
+}
+
+// View ALL employees
+function viewEmployee() {
+    console.log("Retrieving employees from database");
+    var infoQuery =
+        "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department on role.department_id = department.id;";
+    connection.query(infoQuery, function (err, answer) {
+        console.log("\n Employees retrieved from Database \n");
+        console.table(answer);
+    });
+    start();
 }
