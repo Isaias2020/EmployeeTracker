@@ -187,20 +187,11 @@ function addEmployee() {
 
 // View ALL departments
 function viewDepartment() {
-    inquirer.prompt([{
-        name: "department",
-        type: "list",
-        message: "Which department would you like to view?",
-        choices: ["HR", "Engineering", "Sales"]
-    }
-    ])
-        .then(function (answer) {
-            connection.query("SELECT * FROM department", function (err, answer) {
-                console.log("\n Departments Retrieved from Database \n");
-                console.table(answer);
-            });
-            start()
-        });
+    connection.query("SELECT * FROM department", function (err, answer) {
+        console.log("\n Departments Retrieved from Database \n");
+        console.table(answer);
+    });
+    start();
 }
 
 // View ALL roles
@@ -222,4 +213,45 @@ function viewEmployee() {
         console.table(answer);
     });
     start();
+}
+
+// Update Employee Role
+function updateEmployee() {
+    let allemployees = [];
+    connection.query("SELECT * FROM employee", function (err, answer) {
+        for (let i = 0; i < answer.length; i++) {
+            let employeeString =
+                answer[i].id + " " + answer[i].first_name + " " + answer[i].last_name;
+            allemployees.push(employeeString);
+        }
+        inquirer.prompt([{
+            name: "updateEmployee",
+            type: "list",
+            message: "Select employee to update role",
+            choices: allemployees
+        },
+        {
+            name: "newrole",
+            type: "list",
+            message: "Please select new role",
+            choices: ["manager", "employee"],
+        }
+        ])
+            .then(function (answer) {
+                console.log("about to update", answer);
+                const updateID = {};
+                updateID.employeeId = parseInt(answer.updateEmployee.split(" ")[0]);
+                if (answer.newrole === "manager") {
+                    updateID.role_id = 1;
+                } else if (answer.newrole === "employee") {
+                    updateID.role_id = 2;
+                }
+                connection.query("UPDATE employee SET role_id = ? WHERE id = ?",
+                    [updateID.role_id, updateID.employeeId],
+                    function (err, data) {
+                        start();
+                    }
+                );
+            });
+    });
 }
