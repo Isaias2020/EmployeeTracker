@@ -20,84 +20,77 @@ function start() {
         type: "list",
         message: "What would you like to do?",
         choices: [
-            "View all employees",
-            "View all employees by department",
-            "View all employees by manager",
-            "Add employee",
-            "Remove employee",
-            "Update employee role",
-            "Update employee manager",
-            "View Roles",
-            "Add roles",
-            "Remove role",
-            "View department",
             "Add department",
-            "Remove department",
-            "View the total utilized budget of a department",
+            "Add roles",
+            "Add employee",
+            "View department",
+            "View Roles",
+            "View all employees",
+            "Update employee role",
             "Exit"
+            //====================BONUS========================
+            // "Update employee manager",
+            // "View all employees by manager",
+            // "Remove department",
+            // "Remove role",
+            // "Remove employee",
+            // "View the total utilized budget of a department",
         ]
     })
         .then(function (answer) {
             switch (answer.action) {
-                case "View all employees":
-                    viewEmployee();
-                    break;
-
-                case "View all employees by department":
-                    viewEmpDepartment();
-                    break;
-
-                case "View all employees by manager":
-                    viewEmpManager();
-                    break;
-
-                case "Add employee":
-                    addEmployee();
-                    break;
-
-                case "Remove employee":
-                    removeEmployee();
-                    break;
-
-                case "Update employee role":
-                    updateEmployee();
-                    break;
-
-                case "Update employee manager":
-                    updateManager();
-                    break;
-
-                case "View Roles":
-                    viewRole();
+                case "Add department":
+                    addDepartment();
                     break;
 
                 case "Add roles":
                     addRole();
                     break;
 
-                case "Remove role":
-                    removeRole();
+                case "Add employee":
+                    addEmployee();
                     break;
 
                 case "View department":
                     viewDepartment();
                     break;
 
-                case "Add department":
-                    addDepartment();
+                case "View Roles":
+                    viewRole();
                     break;
 
-                case "Remove Department":
-                    removeDepartment();
+                case "View all employees":
+                    viewEmployee();
                     break;
 
-                case "View the total utilized budget of a department":
-                    viewBudget();
+                case "Update employee role":
+                    updateEmployee();
                     break;
 
                 case "Exit":
                     connection.end();
                     break;
+                //==========================
+                //        BONUS
+                //==========================
+                // case "Update employee manager":
+                //     updateManager();
+                //     break;
+                // case "View all employees by manager":
+                //     removeEmployee();
+                //     break;
+                // case "Remove Department":
+                //     removeDepartment();
+                //     break;
+                // case "Remove role":
+                //     removeRole();
+                //     break;
+                // case "Remove employees":
+                //     removeEmployees();
+                //     break;
+                // case "View the total utilized budget of a department":
+                //     viewBudget();
+                //     break;
             };
         });
 };
@@ -255,3 +248,5 @@ function updateEmployee() {
             });
     });
 }
+
+module.exports = connection;
